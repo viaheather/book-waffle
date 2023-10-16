@@ -18,14 +18,14 @@ VALUES ("VP of Engineering", "Engineering", 200000),
        ("Administrative Assistant","Operations", 50000);
 
 
-INSERT INTO employees (first_name, last_name, salary, manager_id)
-VALUES ("Jennifer", "Bui", 200000, NULL),
-       ("Kelly", "Chau", 100000),
-       ("Lydia", "Tran", 85000),
-       ("Jessica", "Nguyen", 110000, NULL),
-       ("Caroline", "Pham", 75000),
-       ("Shannon","Luu", 120000, NULL),
-       ("Monica", "Hu", 70000),
-       ("Rachel", "Chang", 85000),
-       ("Kathy", "Yee", 100000, NULL),
-       ("Christine", "Kim", 50000);
+INSERT INTO employees (first_name, last_name, job_title, department_name,salary, manager_id)
+VALUES ("Jennifer", "Bui","VP of Engineering", "Engineering", 200000, NULL),
+       ("Kelly", "Chau", "Software Engineer", "Engineering",100000, 1),
+       ("Lydia", "Tran", "Solutions Engineer", "Engineering", 85000, 1),
+       ("Jessica", "Nguyen", "VP of Accounts", "Support", 110000, NULL),
+       ("Caroline", "Pham", "Account Manager","Support", 75000,4),
+       ("Shannon","Luu", "VP of Sales", "Sales", 120000, NULL),
+       ("Monica", "Hu", "Sales Representative","Sales", 70000,6),
+       ("Rachel", "Chang", "Human Resources Manager","Human Resources", 85000,6),
+       ("Kathy", "Yee", "Director of Operations","Operations", 100000, NULL),
+       ("Christine", "Kim", "Administrative Assistant","Operations", 50000,9);
