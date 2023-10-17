@@ -7,7 +7,8 @@ USE employee_db;
 CREATE TABLE departments (
   id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   department_name VARCHAR(30) NOT NULL,
-  INDEX (department_name)
+  INDEX (department_name),
+  ON DELETE SET NULL
 );
 
 -- WHEN I choose to view all roles THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role -- 
@@ -17,7 +18,8 @@ CREATE TABLE roles (
   department_name VARCHAR(30) NOT NULL,
   salary INT NOT NULL,
   INDEX (job_title),
-  FOREIGN KEY (department_name) REFERENCES departments(department_name)
+  FOREIGN KEY (department_name) REFERENCES departments(department_name),
+  ON DELETE SET NULL
 );
 
 -- WHEN I choose to view all employees THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to --
@@ -31,5 +33,6 @@ CREATE TABLE employees (
   manager_id INT,
   FOREIGN KEY (department_name) REFERENCES departments(department_name),
   FOREIGN KEY (job_title) REFERENCES roles(job_title),
-  FOREIGN KEY (manager_id) REFERENCES employees(employee_id)  
+  FOREIGN KEY (manager_id) REFERENCES employees(employee_id),
+  ON DELETE SET NULL  
 );
