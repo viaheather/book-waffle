@@ -201,4 +201,53 @@ function addEmployee() {
   });
 }
 
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+function updateRole() {
+  inquirer
+    .prompt([
+      {
+        type: 'input',
+        message: "Enter the employee's first name:",
+        name: 'first_name',
+      },
+      {
+        type: 'input',
+        message: "Enter the employee's last name:",
+        name: 'last_name',
+      },
+      {
+        type: 'input',
+        message: 'Enter the new job title:',
+        name: 'new_job_title',
+      },
+    ])
+    .then((answers) => {
+      // Check if the employee exists in the database
+      const selectQuery = "SELECT * FROM employees WHERE first_name = ? AND last_name = ?";
+      db.query(selectQuery, [answers.first_name, answers.last_name], (err, results) => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+
+        if (results.length === 0) {
+          console.log('Employee not found.');
+          return;
+        }
+
+        // Update the employee's job title
+        const updateQuery = "UPDATE employees SET job_title = ? WHERE first_name = ? AND last_name = ?";
+        db.query(
+          updateQuery,
+          [answers.new_job_title, answers.first_name, answers.last_name],
+          (err, results) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+            console.log(`Updated job title for ${answers.first_name} ${answers.last_name} to ${answers.new_job_title}.`);
+            viewEmployees();
+          }
+        );
+      });
+    });
+}
