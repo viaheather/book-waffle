@@ -26,3 +26,4 @@ SQL, Node.js npm
 ![adding a new role](assets/addRole.png)
 
 ## Video
+[Video Walkthrough located in GDrive. You'll likely need to download the video to watch.](https://drive.google.com/file/d/1tyaLlyqOsWTKmw786_AgOylTjqCzMGdJ/view?usp=share_link)
