@@ -42,6 +42,8 @@ inquirer
       viewEmployees();
     } else if (answers.options === "add a department") {
       addDepartment();
+    } else if (answers.options === "add a role") {
+      addRole();
     } else if (answers.options === "add an employee") {
       addEmployee();
     } else if (answers.options === "update an employee role") {
@@ -120,9 +122,10 @@ function addRole() {
       message: 'Enter the name of the new role:',
       name: 'job_title',
     },{
-      type: 'input',
-      message: 'What department is this role in?',
+      type: 'list',
+      message: 'What department is this in?',
       name: 'department_name',
+      choices: ['Engineering','Support','Sales','Human Resources','Operations'],
     },{
       type: 'input',
       message: 'Enter the salary of the role',
@@ -136,12 +139,12 @@ function addRole() {
     answers.department_name,
     answers.salary,
   ];
-  db.query(query, [answers.departmentName], (err, results) => {
+  db.query(query, values, (err, results) => {
     if (err) {
       console.error(err);
       return;
     }
-    console.log(`${answers.departmentName} was added.`);
+    console.log(`${answers.job_title} was added.`);
     viewRoles();
   })
   });
@@ -163,9 +166,18 @@ function addEmployee() {
       message: 'New employee role:',
       name: 'job_title',
     },{
+      type: 'list',
+      message: 'What department is this in?',
+      name: 'department_name',
+      choices: ['Engineering','Support','Sales','Human Resources','Operations'],
+    },{
       type: 'input',
       message: 'New employee manager ID:',
       name: 'manager_id',
+    },{
+      type: 'input',
+      message: 'New employee salary:',
+      name: 'salary',
     },
   ])
   .then((answers) => { 
@@ -178,7 +190,7 @@ function addEmployee() {
       answers.salary,
       answers.manager_id,
     ];
-  db.query(query, [answers.departmentName], (err, results) => {
+  db.query(query, values, (err, results) => {
     if (err) {
       console.error(err);
       return;
