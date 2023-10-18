@@ -30,25 +30,163 @@ inquirer
       type: 'list',
       message: 'What do you want to do?',
       name: 'options',
-      choices: ['view all departments','view all roles','view all employees','add a department','add a role','add an employee','update an employee role'],
+      choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role'],
     },
   ])
   .then((answers) => {
+    if (answers.options == "view all departments") {
+      viewDepartments();
+    } else if (answers.options === "view all roles") {
+      viewRoles();
+    } else if (answers.options === "view all employees") {
+      viewEmployees();
+    } else if (answers.options === "add a department") {
+      addDepartment();
+    } else if (answers.options === "add an employee") {
+      addEmployee();
+    } else if (answers.options === "update an employee role") {
+      updateRole();
+    } else {
+      console.log("Error.");
+    }
+  });
 
-    if (answers.options === "Add a department") {
-      inquirer
-      .prompt([
-        {
-          type: 'text',
-          message: 'What is the department name?',
-          name: 'newDepartment'
-        }        
-      ])
-      .then((answers) => {
-        const newDepartment = answers.department_name;
-        if (!newDepartment) {
-          console.log("Invalid entry.")
-        }
-      })
-    }});
+  // view departments
+function viewDepartments() {
+  const query = "SELECT * FROM departments";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log("Departments:");
+    console.table(results);
+  });
+}
 
+// view employees
+function viewEmployees() {
+  const query = "SELECT * FROM employees";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log("Employees:");
+    console.table(results);
+  });
+}
+
+// view roles
+function viewRoles() {
+  const query = "SELECT * FROM roles";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log("Roles:");
+    console.table(results);
+  });
+}
+
+//add department
+function addDepartment() {
+  inquirer.prompt([
+    {
+      type: 'input',
+      message: 'Enter the name of the new department:',
+      name: 'department_name',
+    }
+  ])
+  .then((answers) => { 
+  const query = "INSERT INTO departments (department_name) VALUES (?)";
+  db.query(query, [answers.department_name], (err, results) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(`${answers.department_name} was added.`);
+    viewDepartments();
+  })
+  });
+}
+
+//add role
+function addRole() {
+  inquirer.prompt([
+    {
+      type: 'input',
+      message: 'Enter the name of the new role:',
+      name: 'job_title',
+    },{
+      type: 'input',
+      message: 'What department is this role in?',
+      name: 'department_name',
+    },{
+      type: 'input',
+      message: 'Enter the salary of the role',
+      name: 'salary',
+    },
+  ])
+  .then((answers) => { 
+  const query = "INSERT INTO roles (job_title, department_name, salary) VALUES (?, ?, ?)";
+  const values = [
+    answers.job_title,
+    answers.department_name,
+    answers.salary,
+  ];
+  db.query(query, [answers.departmentName], (err, results) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(`${answers.departmentName} was added.`);
+    viewRoles();
+  })
+  });
+}
+
+// add employee
+function addEmployee() {
+  inquirer.prompt([
+    {
+      type: 'input',
+      message: 'New employee first name:',
+      name: 'first_name',
+    },{
+      type: 'input',
+      message: 'New employee last name:',
+      name: 'last_name',
+    },{
+      type: 'input',
+      message: 'New employee role:',
+      name: 'job_title',
+    },{
+      type: 'input',
+      message: 'New employee manager ID:',
+      name: 'manager_id',
+    },
+  ])
+  .then((answers) => { 
+    const query = "INSERT INTO employees (first_name, last_name, job_title, department_name, salary, manager_id) VALUES (?, ?, ?, ?, ?, ?)";
+    const values = [
+      answers.first_name,
+      answers.last_name,
+      answers.job_title,
+      answers.department_name,
+      answers.salary,
+      answers.manager_id,
+    ];
+  db.query(query, [answers.departmentName], (err, results) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(`${answers.first_name} ${answers.last_name} was added.`);
+    viewEmployees();
+  })
+  });
+}
+
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
